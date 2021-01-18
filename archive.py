@@ -1,6 +1,6 @@
 import logging
 import requests
-
+import threading
 from constants import *
 from requests.adapters import HTTPAdapter
 
@@ -41,3 +41,8 @@ def archive_tweet(tweet_url):
         logger = logging.getLogger("error")
         logger.error("Other exception while trying to archive {}.".format(tweet_url), e)
     return None
+
+
+def threaded_archive_tweet(tweet_url):
+    thread = threading.Thread(target=archive_tweet, args=(tweet_url,))
+    thread.start()
