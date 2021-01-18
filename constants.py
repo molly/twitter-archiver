@@ -5,6 +5,7 @@ URL_PREFIX = "https://twitter.com/{user}/status/".format(user=USER_NAME)
 LOGFILE_NAME = "log.log"
 
 WAYBACK_PREFIX = "http://web.archive.org/"
+ARCHIVE_URL = WAYBACK_PREFIX + "save/"
 HEADERS = {
     "user-agent": "https://github.com/molly/twitter-archiver; molly.white5@gmail.com"
 }
