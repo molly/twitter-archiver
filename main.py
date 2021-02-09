@@ -1,9 +1,12 @@
 import logging
 import logging.handlers
+import queue
 import tweepy
+from archive import archive_worker
 from constants import *
 from secrets import *
 from StreamListener import StreamListener
+from threading import Thread
 
 
 def configure_logs():
@@ -34,13 +37,19 @@ def run():
     auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
     api = tweepy.API(auth)
     configure_logs()
-    listener = StreamListener()
+    _sentinel = object()
+    q = queue.Queue()
+    listener = StreamListener(q)
     stream = tweepy.Stream(auth=api.auth, listener=listener)
 
     try:
         print("Stream starting.")
+        thread = Thread(target=archive_worker, args=(q, _sentinel))
+        thread.start()
+        q.join()
         stream.filter(follow=[TWITTER_USER_ID_STR])
     except KeyboardInterrupt:
+        q.put(_sentinel)
         stream.disconnect()
         print("Stream disconnected.")
 
