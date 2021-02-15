@@ -45,6 +45,7 @@ def run():
     try:
         print("Stream starting.")
         thread = Thread(target=archive_worker, args=(q, _sentinel))
+        thread.daemon = True
         thread.start()
         q.join()
         stream.filter(follow=[TWITTER_USER_ID_STR])

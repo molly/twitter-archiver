@@ -1,7 +1,5 @@
 import logging
 import tweepy
-from archive import archive_tweet
-from constants import *
 
 
 class StreamListener(tweepy.StreamListener):
@@ -14,4 +12,5 @@ class StreamListener(tweepy.StreamListener):
 
     def on_error(self, status_code):
         logger = logging.getLogger("error")
-        logger.error("Tweepy error {}".format(status_code))
+        error_str = "Tweepy error {}".format(status_code)
+        logger.error(error_str)

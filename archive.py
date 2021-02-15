@@ -20,27 +20,26 @@ def archive_tweet(tweet_url):
         return r.url
     except requests.exceptions.HTTPError as e:
         logger = logging.getLogger("error")
-        logger.error(
-            "HTTP {} error while trying to archive {}.".format(
-                e.response.status_code, tweet_url
-            ),
-            e,
+        error_str = "HTTP {} error while trying to archive {}.".format(
+            e.response.status_code, tweet_url
         )
+        logger.exception(error_str)
         return None
     except requests.exceptions.Timeout as e:
         logger = logging.getLogger("error")
-        logger.error(
-            "Request timed out while trying to archive {}.".format(tweet_url), e
-        )
+        error_str = "Request timed out while trying to archive {}.".format(tweet_url)
+        logger.exception(error_str)
+        return None
     except requests.exceptions.ConnectionError as e:
         logger = logging.getLogger("error")
-        logger.error(
-            "Connection error while trying to archive {}.".format(tweet_url), e
-        )
+        error_str = "Connection error while trying to archive {}.".format(tweet_url)
+        logger.exception(error_str)
+        return None
     except requests.exceptions.RequestException as e:
         logger = logging.getLogger("error")
-        logger.error("Other exception while trying to archive {}.".format(tweet_url), e)
-    return None
+        error_str = "Other exception while trying to archive {}.".format(tweet_url)
+        logger.exception(error_str)
+        return None
 
 
 def archive_worker(q, _sentinel):
