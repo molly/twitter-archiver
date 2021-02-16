@@ -1,6 +1,6 @@
+import http
 import logging
 import tweepy
-
 
 class StreamListener(tweepy.StreamListener):
     def __init__(self, q):
@@ -14,3 +14,8 @@ class StreamListener(tweepy.StreamListener):
         logger = logging.getLogger("error")
         error_str = "Tweepy error {}".format(status_code)
         logger.error(error_str)
+
+    def on_exception(self, exception):
+        if isinstance(exception, http.client.IncompleteRead):
+            return True
+        return False
